@@ -287,7 +287,7 @@ class _HomeState extends State<Home> {
                                                 .addComment(
                                                 myController
                                                     .text,
-                                                _userUid,mainYemek.name);
+                                                _userUid,_userName,mainYemek.name);
                                             myController.clear();
                                           });
                                         },
@@ -308,24 +308,31 @@ class _HomeState extends State<Home> {
                                           (BuildContext context,
                                           AsyncSnapshot<dynamic>
                                           snapshot) {
+                                            var commentList = snapshot.data.docs;
+
+                                            var mainYemekYorumlari = [];
+
+                                            for(var ele in commentList){
+                                              if(ele["yemekAdi"] == mainYemek.name){
+                                                mainYemekYorumlari.add(ele);
+                                              }
+                                            }
+
                                         return !snapshot.hasData
                                             ? CircularProgressIndicator(
                                           color: Colors.red,)
                                             : ListView.builder(
                                             scrollDirection:
                                             Axis.vertical,
-                                            itemCount: mainYemek
-                                                .comments.length,
+                                            itemCount: mainYemekYorumlari.length,
                                             itemBuilder:
                                                 (context, index) {
-
-                                              DocumentSnapshot myPost = snapshot.data.docs[index];
 
                                               return Card(
                                                 color: Colors.white,
                                                 child: Container(
                                                   height: 30,
-                                                  child: Text(_userName + ": " +myPost["comment"]),
+                                                  child: Text(mainYemekYorumlari[index]["userName"] + ": " +mainYemekYorumlari[index]["comment"]),
                                                 ),
                                               );
                                             });
