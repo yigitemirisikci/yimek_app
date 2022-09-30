@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:yimek_app_lastversion/main.dart';
 import 'package:yimek_app_lastversion/screens/register_page.dart';
 import 'package:yimek_app_lastversion/service/auth.dart';
-import 'home_screen.dart';
+import 'home_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -119,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: ElevatedButton(
                         onPressed: () {
                           _authService
-                              .signIn(myController1.text, myController2.text)
+                              .signIn(myController1.text.trim(), myController2.text.trim())
                               .then((value) => Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -164,27 +164,6 @@ class _LoginPageState extends State<LoginPage> {
                           splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           enableFeedback: false,
-                          /*
-                          style: ButtonStyle(
-                            foregroundColor: MaterialStateProperty.resolveWith<Color?>(
-                                  (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed))
-                                  return Colors.white;
-                                return Colors
-                                    .white; // Use the component's default.
-                              },
-                            ),
-                            backgroundColor:
-                                MaterialStateProperty.resolveWith<Color?>(
-                              (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed))
-                                  return Colors.redAccent;
-                                return Colors
-                                    .red; // Use the component's default.
-                              },
-                            ),
-                          ),
-                          */
                         ),
                       ],
                     ),

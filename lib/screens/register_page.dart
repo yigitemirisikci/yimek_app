@@ -183,10 +183,10 @@ class _RegisterPageState extends State<RegisterPage> {
                         height: 30,
                         child: ElevatedButton(
                           onPressed: () {
-                            if (controller3.text == controller4.text) {
+                            if (controller3.text.trim() == controller4.text.trim()) {
                               _authService.register(
-                                  controller1.text, controller2.text,
-                                  controller3.text).then((value) {
+                                  controller1.text.trim(), controller2.text.trim(),
+                                  controller3.text.trim()).then((value) {
                                       return Navigator.pop(context);
                               });
                             }
