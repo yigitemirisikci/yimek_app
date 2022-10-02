@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as parser;
+import 'package:intl/intl.dart';
 import 'package:yimek_app_lastversion/service/comment_service.dart';
 import 'comment_page.dart';
 
@@ -50,12 +51,29 @@ class _HomeState extends State<Home> {
     var res = await http.get(url);
     var body = res.body;
     var parsedBody = parser.parse(body);
+
+    var now = new DateTime.now();
+    var formatter = new DateFormat('dd.MM.yyyy');
+    String formattedDate = formatter.format(now);
+
+    int yemek_gunu = 0;
+    var elements = parsedBody.getElementsByClassName("popular");
+    for(int i=0;i<elements.length;i++){
+      String date = elements[i].text.split(" ")[1];
+      if(date.split(".")[0].length == 1){
+        date = "0" + date.split(".")[0] + "." + date.split(".")[1] + "." + date.split(".")[2];
+      }
+      print(date);
+      if(date == formattedDate){
+        yemek_gunu = i;
+      }
+    }
+
     var yemeklerString =
-        parsedBody.getElementsByTagName("P")[2].innerHtml.split("<br>");
+        parsedBody.getElementsByTagName("P")[yemek_gunu].innerHtml.split("<br>");
     setState(() {
       for (int i = 0; i < yemeklerString.length - 1; i++) {
         yemekler.add(changeTrLetters(yemeklerString[i]));
-        print(yemekler[i]);
       }
       mainYemek = yemekler[1];
     });
