@@ -95,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                           focusedBorder: InputBorder.none,
                           enabledBorder: InputBorder.none,
                           border: InputBorder.none,
-                          hintText: "Parola",
+                          hintText: "Password",
                           hintStyle: TextStyle(
                               color: Colors.white,
                               fontSize: 15,
@@ -144,7 +144,7 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          "Hesabın yok mu?",
+                          "Hesabin yok mu?",
                           style: TextStyle(color: Colors.white),
                         ),
                         MaterialButton(
