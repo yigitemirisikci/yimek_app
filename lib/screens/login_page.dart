@@ -121,6 +121,8 @@ class _LoginPageState extends State<LoginPage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => Home())));
+                          myController1.clear();
+                          myController2.clear();
                         },
                         child: Text("Giriş Yap"),
                         style: ButtonStyle(
@@ -144,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          "Hesabin yok mu?",
+                          "Hesabın yok mu?",
                           style: TextStyle(color: Colors.white),
                         ),
                         MaterialButton(
@@ -153,6 +155,8 @@ class _LoginPageState extends State<LoginPage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => RegisterPage()));
+                            myController1.clear();
+                            myController2.clear();
                           },
                           child: Text(
                             "Kayıt Ol",
@@ -172,6 +176,8 @@ class _LoginPageState extends State<LoginPage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => Home())));
+                        myController1.clear();
+                        myController2.clear();
                       },
                       child: Text(
                         "Anonim olarak devam et",
