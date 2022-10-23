@@ -5,14 +5,16 @@ import 'package:yimek_app_lastversion/models/Food.dart';
 class FoodService{
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
-  addFood(String foodName, String userName, String userID, String comment) async{
+  addFood(String foodName, String userName, String userID, String comment, String pictureLink,String ref) async{
     var collection = firebaseFirestore.collection(foodName);
 
     var documentRef = await collection.add({
       'comment': comment,
       'userId': userID,
       'userName' : userName,
-      'time' : Timestamp.now()
+      'pictureLink' : pictureLink,
+      'time' : Timestamp.now(),
+      'person' : ref
     });
 
     return Food(id: documentRef.id, comment: comment, userId: userID, userName: userName);
@@ -23,5 +25,6 @@ class FoodService{
 
     return collection;
   }
+
 
 }

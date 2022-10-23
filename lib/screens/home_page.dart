@@ -10,6 +10,7 @@ import 'package:html/parser.dart' as parser;
 import 'package:intl/intl.dart';
 import 'package:yimek_app_lastversion/service/auth.dart';
 import 'package:yimek_app_lastversion/service/comment_service.dart';
+import 'package:yimek_app_lastversion/service/food_service.dart';
 import 'package:yimek_app_lastversion/service/profile_picture_service.dart';
 import 'comment_page.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -35,7 +36,6 @@ class _HomeState extends State<Home> {
   String _userName = "";
   String _userUid = "";
   String _userPp = "";
-
 
   CommentService commentService = CommentService();
   AuthService _auth = AuthService();
@@ -115,7 +115,6 @@ class _HomeState extends State<Home> {
         _userName = value.data()!["userName"];
         _userPp = value.data()!["pictureLink"];
         _userUid = _firebaseUser.uid;
-
       });
     }
   }
@@ -185,7 +184,8 @@ class _HomeState extends State<Home> {
                                                       CommentPage(
                                                           mainYemek: mainYemek,
                                                           userName: _userName,
-                                                          userUid: _userUid)));
+                                                          userUid: _userUid,
+                                                      userPictureLink: _userPp,)));
                                         },
                                         child: Text(
                                           yemekler[index + 1],
@@ -291,7 +291,11 @@ class _HomeState extends State<Home> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   _userPp != ""
-                                      ? Image(image: NetworkImage(_userPp),width: 150,height: 150,fit:BoxFit.cover)
+                                      ? Image(
+                                          image: NetworkImage(_userPp),
+                                          width: 150,
+                                          height: 150,
+                                          fit: BoxFit.cover)
                                       : Container(
                                           color: Colors.grey,
                                           child: Icon(
@@ -317,11 +321,10 @@ class _HomeState extends State<Home> {
                                                             onPressed: () {
                                                               Navigator.pop(
                                                                   context);
-                                                              this.setState(
-                                                                  () {
-                                                                _userPp=
-                                                                     _pictureService
-                                                                        .getPhotoFromGallery() as String;
+                                                              this.setState(() {
+                                                                _userPp = _pictureService
+                                                                        .getPhotoFromGallery()
+                                                                    as String;
                                                               });
                                                             },
                                                             child: Text(
@@ -343,11 +346,10 @@ class _HomeState extends State<Home> {
                                                             onPressed: () {
                                                               Navigator.pop(
                                                                   context);
-                                                              this.setState(
-                                                                  () {
-                                                                _userPp =
-                                                                     _pictureService
-                                                                        .getPhotoFromCam() as String;
+                                                              this.setState(() {
+                                                                _userPp = _pictureService
+                                                                        .getPhotoFromCam()
+                                                                    as String;
                                                               });
                                                             },
                                                             child: Text(
@@ -495,6 +497,7 @@ class _HomeState extends State<Home> {
                                                                   nameController
                                                                       .text,
                                                                   _userUid);
+                                                               // her food da değiştir
                                                               nameController
                                                                   .clear();
                                                               Navigator.pop(

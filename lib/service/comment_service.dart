@@ -23,4 +23,12 @@ class CommentService{
 
     return collection;
   }
+
+  Future<String> getPictureLink(String uid) async{
+    String url = "";
+    await firebaseFirestore.collection("Person").doc(uid).get().then((value) {
+      url = value.data()!["pictureLink"];
+    });
+    return url;
+  }
 }

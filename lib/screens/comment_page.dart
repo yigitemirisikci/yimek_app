@@ -1,74 +1,32 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:yimek_app_lastversion/service/food_service.dart';
+import 'package:yimek_app_lastversion/service/get_user_details.dart';
 import '../service/comment_service.dart';
 
 class CommentPage extends StatefulWidget {
   final String mainYemek;
   final String userName;
   final String userUid;
+  final String userPictureLink;
 
   const CommentPage(
       {Key? key,
       required this.mainYemek,
       required this.userName,
-      required this.userUid})
+      required this.userUid,
+      required this.userPictureLink})
       : super(key: key);
 
   @override
   State<CommentPage> createState() => _CommentPageState();
 }
 
-typedef void RatingChangeCallback(double rating);
-
-class StarRating extends StatelessWidget {
-  final int starCount;
-  final double rating;
-  final RatingChangeCallback onRatingChanged;
-  final Color color;
-
-  StarRating(
-      {this.starCount = 5,
-      this.rating = .0,
-      required this.onRatingChanged,
-      required this.color});
-
-  Widget buildStar(BuildContext context, int index) {
-    Icon icon;
-    if (index >= rating) {
-      icon = new Icon(
-        Icons.star_border,
-        color: Theme.of(context).buttonColor,
-      );
-    } else if (index > rating - 1 && index < rating) {
-      icon = new Icon(
-        Icons.star_half,
-        color: color ?? Theme.of(context).primaryColor,
-      );
-    } else {
-      icon = new Icon(
-        Icons.star,
-        color: color ?? Theme.of(context).primaryColor,
-      );
-    }
-    return new InkResponse(
-      onTap:
-          onRatingChanged == null ? null : () => onRatingChanged(index + 1.0),
-      child: icon,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return new Row(
-        children:
-            new List.generate(starCount, (index) => buildStar(context, index)));
-  }
-}
-
 class _CommentPageState extends State<CommentPage> {
   TextEditingController myController = TextEditingController();
   CommentService commentService = CommentService();
   FoodService foodService = FoodService();
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -168,7 +126,9 @@ class _CommentPageState extends State<CommentPage> {
                                           widget.mainYemek,
                                           widget.userName,
                                           widget.userUid,
-                                          myController.text);
+                                          myController.text,
+                                          widget.userPictureLink,
+                                          "Person/${widget.userUid}");
 
                                       myController.clear();
                                     });
@@ -208,22 +168,22 @@ class _CommentPageState extends State<CommentPage> {
                                                       .toDate()
                                                       .toString())
                                                   .minute;
-
                                           return Card(
                                             color: Colors.white,
                                             child: Container(
-                                              height: 30,
                                               child: Row(
                                                 children: [
                                                   Expanded(
                                                     child: Row(
                                                       children: [
                                                         Padding(
-                                                          padding: EdgeInsets.symmetric(horizontal: 5),
+                                                          padding:
+                                                              EdgeInsets.all(5),
                                                           child: Container(
                                                               decoration:
                                                                   const BoxDecoration(
-                                                                      color: Colors.grey,
+                                                                      color: Colors
+                                                                          .grey,
                                                                       boxShadow: [
                                                                     BoxShadow(
                                                                         color: Colors
@@ -233,37 +193,55 @@ class _CommentPageState extends State<CommentPage> {
                                                                         spreadRadius:
                                                                             2)
                                                                   ]),
-                                                              child: Icon(
-                                                                  Icons.person,
-                                                                  color: Colors
-                                                                      .white)),
+                                                              child: commentList[
+                                                                              index]
+                                                                          [
+                                                                          "userName"] ==
+                                                                      "Anonim"
+                                                                  ? Icon(
+                                                                      Icons
+                                                                          .person,
+                                                                      color: Colors
+                                                                          .white,
+                                                                      size: 50,
+                                                                    )
+                                                                  : GetUserPictureLink(
+                                                                      referance:
+                                                                          commentList[index]
+                                                                              [
+                                                                              "person"])),
                                                         ),
-                                                        Text(
-                                                          commentList[index]
-                                                                  ["userName"] +
-                                                              ": ",
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
+                                                        commentList[index][
+                                                                    "userName"] ==
+                                                                "Anonim"
+                                                            ? Text("Anonim: ",style: TextStyle(fontWeight: FontWeight.bold),)
+                                                            : GetUserName(
+                                                                referance:
+                                                                    commentList[
+                                                                            index]
+                                                                        [
+                                                                        "person"]),
+                                                        Container(
+                                                          width: 120,
+                                                          child: Text(commentList[index]
+                                                              ["comment"]),
                                                         ),
-                                                        Text(commentList[index]
-                                                            ["comment"])
+                                                        new Spacer(),
+                                                        Expanded(
+                                                          child: hourDif != 0
+                                                              ? Text(
+                                                              hourDif.toString() +
+                                                                  " saat önce")
+                                                              : minDif == 0
+                                                              ? Text(" az önce")
+                                                              : Text(minDif
+                                                              .toString() +
+                                                              " dakika önce"),
+                                                        ),
                                                       ],
                                                     ),
                                                   ),
-                                                  new Spacer(),
-                                                  Expanded(
-                                                    child: hourDif != 0
-                                                        ? Text(
-                                                            hourDif.toString() +
-                                                                " saat önce")
-                                                        : minDif == 0
-                                                            ? Text(" az önce")
-                                                            : Text(minDif
-                                                                    .toString() +
-                                                                " dakika önce"),
-                                                  ),
+
                                                 ],
                                               ),
                                             ),
